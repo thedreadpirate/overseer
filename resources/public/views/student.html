@@ -1,0 +1,48 @@
+
+        <div class="lead form-group">
+          <div class="col-md-12">
+            <a type="href" ng-click="screen='home'">Back to student list</a>
+          </div> 
+          <div class="col-md-12">
+            <h1 class="col-md-6">{{att.name}}</h1><span class="col-md-6">(Requires {{requiredMinutes(att)}} minutes a day)</span>
+          </div>
+          <div class="col-md-6" ng-show="isAdmin">
+            Attended: {{att.total_days}} - Absent: {{att.total_abs}} - Overrides: {{att.total_overrides}}
+            <button class="btn" ng-click="toggleHours(att)">Toggle Hours</button>
+          </div>
+          <div class="clearfix"></div>
+          <div class="col-md-6">
+            <button type="button" class="btn" ng-click="swipe('in')" ng-class="inButtonStyle()">Swipe In</button>
+            <button type="button" class="btn" ng-hide="hideSwipeOut()" ng-click="swipe('out')" ng-class="outButtonStyle()">Swipe Out</button>
+            <ul ng-show="isAdmin">
+              <li ng-repeat="swipe in att.days" style="text-left">
+                <div>
+                  <label>
+                    <span ng-class="{validday: swipe.valid}" style="width:50px" 
+                          ng-click="setDay(swipe)"
+                          ng-style="{'border':(swipe.day==current_day.day)?'1px solid black':''}">
+                      {{swipe.day}} - {{swipe.total_mins}} minutes 
+                      <span ng-show="swipe.override"> - Overridden</span>
+                      <a href="" ng-hide="swipe.valid || !isAdmin" ng-click="override(att._id,swipe.day)"> Override</a>
+                    </span>
+                  </label>
+                </div>
+              </li>
+            </ul>
+          </div>
+          <div class="col-md-6">
+            <table class="table table-striped" ng-show="current_day">
+              <tr>
+                <th>In Time</th>
+                <th>Out Time</th>
+                <th>Minutes</th>
+              </tr>
+              <tr ng-repeat="s in current_day.swipes">
+                <td>{{s.nice_in_time}}</td>
+                <td>{{s.nice_out_time}}</td>
+                <td>{{s.interval}}</td>
+              </tr>
+            </table>
+          </div>
+          <!-- <div> {{att}} </div> -->
+        </div>

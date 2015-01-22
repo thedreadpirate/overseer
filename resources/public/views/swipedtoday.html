@@ -1,0 +1,7 @@
+
+        <div class="form-group"  ng-show="screen === 'swiped-today'">
+          <h2>Today's Attendance</h2>
+          <li ng-repeat="student in students | filter:{in_today:'true'}">
+            {{student.name}}
+          </li>
+        </div>

@@ -1,4 +1,3 @@
-angular.module('app', ['ui.bootstrap']);
 angular.module('app').controller("MainController", function($scope, $http){
     $scope.students = [];
     $scope.screen = "home";

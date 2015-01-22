@@ -1,0 +1,11 @@
+        <div class="lead form-group" ng-show="screen ==='create-year'">
+          <h4>Year Start</h4>
+          <div style="display:inline-block; min-height:290px;">
+            <datepicker ng-model="from_date" min-date="minDate" show-weeks="false" class="well well-sm"></datepicker>
+          </div>
+          <h4>Year End</h4>
+          <div style="display:inline-block; min-height:290px;">
+            <datepicker ng-model="to_date" min-date="minDate" show-weeks="false" class="well well-sm"></datepicker>
+          </div>
+          <button class="btn btn-primary" ng-click="createYear()" ng-disabled="!(to_date && from_date)">Create Year</button>
+        </div>
