@@ -2,7 +2,7 @@
         <div class="lead form-group" ng-show="screen ==='home'">
           <div class="col-md-6" ng-show="screen ==='home'">
             <ul ng-show="screen ==='home'">
-              <li class="list-unstyled" ng-repeat="student in students">
+              <li class="list-unstyled" ng-repeat="student in homeCtrl.students">
                 <a class="" ng-href="#/student/{{student.name}}">{{student.name}}</a>
                 <!-- {{student}} -->
               </li>
