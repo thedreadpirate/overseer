@@ -8,11 +8,7 @@ angular
 
   })
   .controller('StudentCtrl', function ($scope, $routeParams, studentService) {
-    studentService.getStudents().then(function (data) {
-      console.log('ctrl');
-      console.log(data);
-      $scope.att = data.filter(function (s) {
-        return s.name === $routeParams.name;
-      })[0];
+    studentService.getStudent($routeParams.name).then(function (student) {
+      $scope.att = student;
     });
   });

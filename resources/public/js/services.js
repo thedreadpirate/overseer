@@ -1,21 +1,27 @@
 angular
   .module('services', [])
   .service('studentService', function ($http, $q) {
-    var students, totals_students;
+    var students;
 
-    var loadStudentData = function (data) {
-      console.log('student data');
-      console.log(data);
-      students = data;
-      totals_students = data;
-    };
+    this.getStudent = function (name) {
+      var deferred = $q.defer();
 
-    this.getStudents = function (callback) {
+      this.getStudents().then(function (data) {
+        deferred.resolve(
+          data.filter(function (s) {
+            return s.name === name;
+          })[0]);
+      });
+
+      return deferred.promise;
+    }
+
+    this.getStudents = function () {
       var deferred = $q.defer();
       if (!students) {
         $http.post('/student/all')
           .then(function (data) {
-            loadStudentData(data.data);
+            students = data.data;
             deferred.resolve(data.data);
           });
       } else {
