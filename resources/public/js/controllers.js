@@ -22,6 +22,18 @@ angular
         })
     }
 
+    self.toggleHours = function (student) {
+      if (confirm(student.olderdate ? "Mark student younger?" : "Mark student as older starting today?")) {
+        student.olderdate = !!!student.olderdate;
+        $http.post('/student/togglehours', {
+          _id: student._id
+        }).
+        success(function (data) {
+          self.getStudents();
+        }).error(function () {});
+      }
+    };
+
     self.requiredMinutes = function (student) {
       if (!self.student) {
         return "";

@@ -56,19 +56,6 @@ angular.module('app').controller("MainController", function ($http) {
       }).error(function () {});
     }
   };
-  self.toggleHours = function (student) {
-    if (confirm(student.olderdate ? "Mark student younger?" : "Mark student as older starting today?")) {
-      student.olderdate = !!!student.olderdate;
-      $http.post('/student/togglehours', {
-        _id: student._id
-      }).
-      success(function (data) {
-        self.getStudents();
-        self.init();
-      }).error(function () {});
-    }
-  };
-
 
   self.getTotalsStudents = function () {
     $http.post('/student/all', {

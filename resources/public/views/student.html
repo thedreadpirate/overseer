@@ -8,7 +8,7 @@
           </div>
           <div class="col-md-6" ng-show="main.isAdmin">
             Attended: {{studentCtrl.student.att.total_days}} - Absent: {{studentCtrl.student.total_abs}} - Overrides: {{studentCtrl.student.total_overrides}}
-            <button class="btn" ng-click="toggleHours(studentCtrl.student)">Toggle Hours</button>
+            <button class="btn" ng-click="studentCtrl.toggleHours(studentCtrl.student)">Toggle Hours</button>
           </div>
           <div class="clearfix"></div>
           <div class="col-md-6">
