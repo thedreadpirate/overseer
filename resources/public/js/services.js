@@ -3,6 +3,15 @@ angular
   .service('studentService', function ($http, $q) {
     var students;
 
+    var applyToStudents = function (call) {
+      var deferred = $q.defer();
+
+      call().then(function (data) {
+        students = data.dat
+        deferred.resolve(data);
+      })
+    };
+
     this.getStudent = function (name) {
       var deferred = $q.defer();
 
@@ -29,4 +38,14 @@ angular
       }
       return deferred.promise;
     };
+
+    this.createStudent = function (student) {
+      return $http.post('/student/create', {
+        "name": name
+      }).then(function (data) {
+        students = data.data.students;
+        return data.data;
+      });
+    };
+
   });

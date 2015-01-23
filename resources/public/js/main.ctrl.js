@@ -1,209 +1,194 @@
-angular.module('app').controller("MainController", function ($scope, $http) {
-  $scope.students = [];
-  $scope.screen = "home";
-  $scope.current_totals_year = null;
-  $scope.missing_date = "";
-  $scope.missing_swipe = "";
-  $scope.backStudent = function (s) {
-    $scope.swipedWorked = false;
-    $scope.screen = "student";
+angular.module('app').controller("MainController", function ($http) {
+  var self = this;
+  self.students = [];
+  self.screen = "home";
+  self.current_totals_year = null;
+  self.missing_date = "";
+  self.missing_swipe = "";
+  self.backStudent = function (s) {
+    self.swipedWorked = false;
+    self.screen = "student";
   };
-  $scope.showStudent = function (s) {
-    $scope.swipedWorked = false;
-    $scope.backStudent();
-    $scope.att = s;
-    $scope.current_day = s.days[0];
+  self.showStudent = function (s) {
+    self.swipedWorked = false;
+    self.backStudent();
+    self.att = s;
+    self.current_day = s.days[0];
   };
-  $scope.showHome = function (worked) {
-    $scope.swipedWorked = worked;
-    $scope.screen = "home";
+  self.showHome = function (worked) {
+    self.swipedWorked = worked;
+    self.screen = "home";
   };
-  $scope.showSwipedToday = function () {
-    $scope.swipedWorked = false;
-    $scope.screen = "swiped-today";
+  self.showSwipedToday = function () {
+    self.swipedWorked = false;
+    self.screen = "swiped-today";
   };
-  $scope.showCreate = function () {
-    $scope.swipedWorked = false;
-    $scope.screen = "create";
+  self.showCreate = function () {
+    self.swipedWorked = false;
+    self.screen = "create";
   };
-  $scope.showCreateYear = function () {
-    $scope.swipedWorked = false;
-    $scope.screen = "create-year";
+  self.showCreateYear = function () {
+    self.swipedWorked = false;
+    self.screen = "create-year";
   };
-  $scope.showStudents = function () {
-    $scope.swipedWorked = false;
-    $scope.screen = "student-totals";
+  self.showStudents = function () {
+    self.swipedWorked = false;
+    self.screen = "student-totals";
   };
-  $scope.setDay = function (s) {
-    $scope.current_day = s;
+  self.setDay = function (s) {
+    self.current_day = s;
   };
-  $scope.override = function (id, day) {
+  self.override = function (id, day) {
     if (confirm("Override " + day + "?")) {
-      $scope.screen = "saving";
+      self.screen = "saving";
       $http.post('/override', {
         "_id": id,
         "day": day
       }).
       success(function (data) {
-        $scope.att = data.student;
-        $scope.current_day = data.student.days[0];
-        $scope.loadStudentData(data.all);
-        $scope.screen = "student";
+        self.att = data.student;
+        self.current_day = data.student.days[0];
+        self.loadStudentData(data.all);
+        self.screen = "student";
       }).error(function () {});
     }
   };
-  $scope.requiredMinutes = function (student) {
+  self.requiredMinutes = function (student) {
     if (!student) {
       return "";
     }
     return student.olderdate ? 330 : 300;
   };
-  $scope.createYear = function () {
-    if (confirm("Create school year from " + $scope.from_date + " to " + $scope.to_date + "?")) {
+  self.createYear = function () {
+    if (confirm("Create school year from " + self.from_date + " to " + self.to_date + "?")) {
       $http.post('/year/create', {
-        "from_date": $scope.from_date,
-        "to_date": $scope.to_date
+        "from_date": self.from_date,
+        "to_date": self.to_date
       }).
       success(function (data) {
-        $scope.init();
+        self.init();
       }).error(function () {});
     }
   };
-  $scope.toggleHours = function (student) {
+  self.toggleHours = function (student) {
     if (confirm(student.olderdate ? "Mark student younger?" : "Mark student as older starting today?")) {
       student.olderdate = !!!student.olderdate;
       $http.post('/student/togglehours', {
         _id: student._id
       }).
       success(function (data) {
-        $scope.getStudents();
-        $scope.init();
+        self.getStudents();
+        self.init();
       }).error(function () {});
     }
   };
-  $scope.get_missing_swipe = function () {
+  self.get_missing_swipe = function () {
     var d = new Date();
-    if ($scope.att.last_swipe_date) {
-      d = new Date($scope.att.last_swipe_date + "T10:00:00");
+    if (self.att.last_swipe_date) {
+      d = new Date(self.att.last_swipe_date + "T10:00:00");
     }
-    $scope.missing_direction = ($scope.att.last_swipe_type == "in") ? "out" : "in";
-    d.setHours(($scope.missing_direction == "in") ? 8 : 15);
+    self.missing_direction = (self.att.last_swipe_type == "in") ? "out" : "in";
+    d.setHours((self.missing_direction == "in") ? 8 : 15);
     d.setMinutes(0);
-    $scope.missing_swipe = d;
-    $scope.screen = "get-swipe-time";
+    self.missing_swipe = d;
+    self.screen = "get-swipe-time";
   };
-  $scope.swipe_with_missing = function (missing) {
-    $scope.att.missing = missing;
-    $scope.missing_swipe = "";
-    $scope.makeSwipePost();
+  self.swipe_with_missing = function (missing) {
+    self.att.missing = missing;
+    self.missing_swipe = "";
+    self.makeSwipePost();
   };
-  $scope.makeSwipePost = function () {
-    $scope.screen = "saving";
+  self.makeSwipePost = function () {
+    self.screen = "saving";
     $http.post('/swipe', {
-      "_id": $scope.att._id,
-      "direction": $scope.att.direction,
-      "missing": $scope.att.missing
+      "_id": self.att._id,
+      "direction": self.att.direction,
+      "missing": self.att.missing
     }).
     success(function (data) {
-      $scope.loadStudentData(data);
-      $scope.showHome($scope.att.name + " swiped successfully!");
+      self.loadStudentData(data);
+      self.showHome(self.att.name + " swiped successfully!");
     }).error(function () {});
   };
-  $scope.inButtonStyle = function () {
-    if (!$scope.att) {
+  self.inButtonStyle = function () {
+    if (!self.att) {
       return "";
     }
-    return ($scope.att.last_swipe_type == "out") ? "btn-lg btn-success" : "";
+    return (self.att.last_swipe_type == "out") ? "btn-lg btn-success" : "";
   };
-  $scope.outButtonStyle = function () {
-    if (!$scope.att) {
+  self.outButtonStyle = function () {
+    if (!self.att) {
       return "";
     }
-    return ($scope.att.last_swipe_type == "in") ? "btn-lg btn-success" : "";
+    return (self.att.last_swipe_type == "in") ? "btn-lg btn-success" : "";
   };
-  $scope.hideSwipeOut = function () {
-    if ($scope.att) {
-      return ($scope.att.today != $scope.att.last_swipe_date) && $scope.att.last_swipe_type;
+  self.hideSwipeOut = function () {
+    if (self.att) {
+      return (self.att.today != self.att.last_swipe_date) && self.att.last_swipe_type;
     }
     return true;
   };
-  $scope.swipe = function (direction) {
-    $scope.att.direction = direction;
-    if ((($scope.att.last_swipe_type == "out" || !$scope.att.last_swipe_type) && direction == "out") || ($scope.att.last_swipe_type == "in" && direction == "in")) {
-      $scope.get_missing_swipe();
+  self.swipe = function (direction) {
+    self.att.direction = direction;
+    if (((self.att.last_swipe_type == "out" || !self.att.last_swipe_type) && direction == "out") || (self.att.last_swipe_type == "in" && direction == "in")) {
+      self.get_missing_swipe();
     } else {
-      $scope.makeSwipePost();
+      self.makeSwipePost();
     }
   };
-  $scope.createStudent = function (name) {
-    $scope.screen = "saving";
-    $http.post('/student/create', {
-      "name": name
-    }).
-    success(function (data) {
-      $scope.students = data.students;
-      if (data.made) {
-        $scope.showHome(name + " created successfully!");
-        $scope.message = "";
-        $scope.cstudent = "";
-      } else {
-        $scope.screen = "create";
-        $scope.message = "A student named " + name + " already exists";
-      }
-    }).error(function () {});
-  };
-  $scope.getTotalsStudents = function () {
+
+  self.getTotalsStudents = function () {
     $http.post('/student/all', {
-      "year": $scope.current_totals_year
+      "year": self.current_totals_year
     }).
     success(function (data) {
-      $scope.totals_students = data;
+      self.totals_students = data;
     }).error(function () {});
   };
-  $scope.loadStudentData = function (data) {
-    $scope.students = data;
-    $scope.totals_students = data;
+  self.loadStudentData = function (data) {
+    self.students = data;
+    self.totals_students = data;
   };
-  $scope.getStudents = function (callback) {
+  self.getStudents = function (callback) {
     $http.post('/student/all').
     success(function (data) {
-      $scope.loadStudentData(data);
+      self.loadStudentData(data);
       if (callback) {
         callback();
       }
     }).error(function () {});
   };
-  $scope.getYears = function () {
+  self.getYears = function () {
     $http.get('/year/all').
     success(function (data) {
-      $scope.years = data.years;
-      $scope.current_totals_year = data.current_year;
+      self.years = data.years;
+      self.current_totals_year = data.current_year;
     }).error(function () {});
   };
-  $scope.deleteYear = function (year) {
+  self.deleteYear = function (year) {
     if (confirm("Delete year " + year + "?")) {
       $http.post('/year/delete', {
         "year": year
       }).
       success(function (data) {
-        $scope.years = data.years;
-        $scope.current_totals_year = data.current_year;
-        $scope.init();
+        self.years = data.years;
+        self.current_totals_year = data.current_year;
+        self.init();
       }).error(function () {});
     }
   };
-  $scope.isAdmin = false;
-  $scope.checkRole = function () {
+  self.isAdmin = false;
+  self.checkRole = function () {
     $http.post('/is-admin').
     success(function (data) {
-      $scope.isAdmin = true;
+      self.isAdmin = true;
     }).error(function () {});
   };
-  $scope.init = function () {
-    $scope.screen = "loading";
-    $scope.checkRole();
-    $scope.getYears();
-    $scope.showHome();
+  self.init = function () {
+    self.screen = "loading";
+    self.checkRole();
+    self.getYears();
+    self.showHome();
   };
-  $scope.init();
+  self.init();
 });

@@ -8,7 +8,8 @@ overseer.config(function ($locationProvider, $routeProvider) {
       controllerAs: 'homeCtrl'
     })
     .when('/student/new', {
-      templateUrl: 'views/createstudent.html'
+      templateUrl: 'views/createstudent.html',
+      controller: 'StudentCtrl'
     })
     .when('/student/:name', {
       templateUrl: 'views/student.html',

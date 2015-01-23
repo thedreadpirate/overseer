@@ -1,14 +1,14 @@
 
-        <div class="lead form-group" ng-show="screen ==='home'">
-          <div class="col-md-6" ng-show="screen ==='home'">
-            <ul ng-show="screen ==='home'">
+        <div class="lead form-group">
+          <div class="col-md-6" >
+            <ul>
               <li class="list-unstyled" ng-repeat="student in homeCtrl.students">
                 <a class="" ng-href="#/student/{{student.name}}">{{student.name}}</a>
                 <!-- {{student}} -->
               </li>
             </ul>
           </div>
-          <div class="row col-md-6" ng-show="isAdmin" >
-            <a class="btn btn-success" ng-show="isAdmin" href="#/student/new">Create Student</a>
+          <div class="row col-md-6" ng-show="main.isAdmin" >
+            <a class="btn btn-success" href="#/student/new">Create Student</a>
           </div>
         </div>
