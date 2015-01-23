@@ -4,18 +4,18 @@
             <a href="#/">Back to student list</a>
           </div> 
           <div class="col-md-12">
-            <h1 class="col-md-6">{{att.name}}</h1><span class="col-md-6">(Requires {{requiredMinutes(att)}} minutes a day)</span>
+            <h1 class="col-md-6">{{studentCtrl.student.name}}</h1><span class="col-md-6">(Requires {{studentCtrl.requiredMinutes(studentCtrl.student.att)}} minutes a day)</span>
           </div>
-          <div class="col-md-6" ng-show="isAdmin">
-            Attended: {{att.total_days}} - Absent: {{att.total_abs}} - Overrides: {{att.total_overrides}}
-            <button class="btn" ng-click="toggleHours(att)">Toggle Hours</button>
+          <div class="col-md-6" ng-show="main.isAdmin">
+            Attended: {{studentCtrl.student.att.total_days}} - Absent: {{studentCtrl.student.total_abs}} - Overrides: {{studentCtrl.student.total_overrides}}
+            <button class="btn" ng-click="toggleHours(studentCtrl.student)">Toggle Hours</button>
           </div>
           <div class="clearfix"></div>
           <div class="col-md-6">
-            <button type="button" class="btn" ng-click="swipe('in')" ng-class="inButtonStyle()">Swipe In</button>
-            <button type="button" class="btn" ng-hide="hideSwipeOut()" ng-click="swipe('out')" ng-class="outButtonStyle()">Swipe Out</button>
-            <ul ng-show="isAdmin">
-              <li ng-repeat="swipe in att.days" style="text-left">
+            <button type="button" class="btn" ng-click="swipe('in')" ng-class="main.inButtonStyle()">Swipe In</button>
+            <button type="button" class="btn" ng-hide="studentCtrl.hideSwipeOut()" ng-click="studentCtrl.swipe('out')" ng-class="outButtonStyle()">Swipe Out</button>
+            <ul ng-show="main.isAdmin">
+              <li ng-repeat="swipe in studentCtrl.student.days" style="text-left">
                 <div>
                   <label>
                     <span ng-class="{validday: swipe.valid}" style="width:50px" 
@@ -23,7 +23,7 @@
                           ng-style="{'border':(swipe.day==current_day.day)?'1px solid black':''}">
                       {{swipe.day}} - {{swipe.total_mins}} minutes 
                       <span ng-show="swipe.override"> - Overridden</span>
-                      <a href="" ng-hide="swipe.valid || !isAdmin" ng-click="override(att._id,swipe.day)"> Override</a>
+                      <a href="" ng-hide="swipe.valid || !main.isAdmin" ng-click="override(studentCtrl.student._id,swipe.day)"> Override</a>
                     </span>
                   </label>
                 </div>
@@ -44,5 +44,5 @@
               </tr>
             </table>
           </div>
-          <!-- <div> {{att}} </div> -->
+          <!-- <div> {{studentCtrl.student}} </div> -->
         </div>

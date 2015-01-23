@@ -13,7 +13,8 @@ overseer.config(function ($locationProvider, $routeProvider) {
     })
     .when('/student/:name', {
       templateUrl: 'views/student.html',
-      controller: 'StudentCtrl'
+      controller: 'StudentCtrl',
+      controllerAs: 'studentCtrl'
     })
     .otherwise({
       redirectTo: '/'
